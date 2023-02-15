@@ -1,14 +1,22 @@
 import { Report } from 'notiflix';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ContactForm from 'components/ContactForm';
 import ContactList from 'components/ContactList';
 import Filter from '../Filter';
 import { Container, SubTitle, Title } from './App.styled';
 
+const KEY_CONTACTS = 'name/tell';
+
 const App = () => {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(() =>
+    JSON.parse(localStorage.getItem(KEY_CONTACTS) || [])
+  );
   const [filter, setFilter] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem(KEY_CONTACTS, JSON.stringify(contacts));
+  }, [contacts]);
 
   const onSubmitForm = contact => {
     const isContainName = checkName(contact.name);
